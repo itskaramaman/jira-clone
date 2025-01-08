@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  clerkUserId String   @unique
+  name        String
+  email       String   @unique
+  role        UserRole @default(USER)
+  imageUrl    String?
+
+  projects Project[] @relation("ProjectMembers")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Project   Project[]
+}
+
+model Project {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String
+  owner       User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  members     User[]  @relation("ProjectMembers")
+
+  sprints Sprint[]
+  tickets Ticket[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Sprint {
+  id        String   @id @default(uuid())
+  startDate DateTime
+  endDate   DateTime
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
+
+  tickets Ticket[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Ticket {
+  id          String         @id @default(uuid())
+  title       String
+  description String?
+  status      TicketStatus
+  priority    TicketPriority
+
+  sprintId String
+  sprint   Sprint @relation(fields: [sprintId], references: [id])
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum TicketStatus {
+  PENDING
+  PROGRESS
+  COMPLETED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}

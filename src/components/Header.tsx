@@ -3,8 +3,10 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { PenBox } from "lucide-react";
+import { checkUser } from "@/actions/user";
 
-const Header = () => {
+const Header = async () => {
+  await checkUser();
   return (
     <nav className="fixed top-0 left-0 right-0 flex justify-between items-center z-20 p-5 border-b-2 backdrop-blur-md">
       <div>
@@ -13,9 +15,12 @@ const Header = () => {
         </Link>
       </div>
       <div className="flex gap-2 items-center">
-        <Button variant="bgBlue">
-          <PenBox /> Create Project
+        <Button asChild variant="bgBlue">
+          <Link href="?create-project=true">
+            <PenBox /> Create Project
+          </Link>
         </Button>
+
         <SignedOut>
           <Button asChild variant="outline">
             <SignInButton />
