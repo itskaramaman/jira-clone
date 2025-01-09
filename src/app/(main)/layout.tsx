@@ -8,7 +8,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       <AppSidebar />
       <main>
         <SidebarTrigger />
-        {children}
+        <div className="p-5">{children}</div>
       </main>
     </SidebarProvider>
   );

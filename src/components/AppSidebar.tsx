@@ -1,4 +1,4 @@
-import { Home } from "lucide-react";
+import { Home, Inbox } from "lucide-react";
 
 import {
   Sidebar,
@@ -15,12 +15,17 @@ const sidebarLinks = [
     icon: Home,
     path: "/dashboard",
   },
+  {
+    text: "Projects",
+    icon: Inbox,
+    path: "/projects",
+  },
 ];
 
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarContent className="pt-20">
+      <SidebarContent className="pt-28">
         <SidebarGroup>
           <SidebarMenu>
             {sidebarLinks.map((item) => (
@@ -29,7 +34,7 @@ export function AppSidebar() {
                   href={item.path}
                   className="flex flex-row items-center gap-2 text-gray-600 hover:bg-blue-500 hover:text-white p-2 rounded-md"
                 >
-                  <item.icon />
+                  <item.icon size={18} />
                   <span>{item.text}</span>
                 </Link>
               </SidebarMenuItem>
