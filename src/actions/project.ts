@@ -3,7 +3,13 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 
-export async function createProject(name:string) {
+export async function createProject({
+  name,
+  description,
+}: {
+  name: string;
+  description?: string;
+}) {
   try {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
@@ -11,10 +17,15 @@ export async function createProject(name:string) {
     const user = await db.user.findUnique({ where: { clerkUserId: userId } });
     if (!user) throw new Error("User not found");
 
-    const project = await db.project.create({data: {
+    const project = await db.project.create({
+      data: {
         name,
-        ownerId: user.id
-    }})
+        description,
+        ownerId: user.id,
+      },
+    });
+
+    return { success: true, data: project };
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);

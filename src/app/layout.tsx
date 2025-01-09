@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ProjectDrawer from "@/components/ProjectDrawer";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <main className="w-full min-h-screen relative pt-24">
             {children}
             <ProjectDrawer />
+            <Toaster richColors />
           </main>
           <Footer />
         </body>
