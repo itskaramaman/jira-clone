@@ -22,11 +22,13 @@ import useFetch from "@/hooks/useFetch";
 import { createProject } from "@/actions/project";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const ProjectDrawer = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const path = usePathname();
 
   const {
     register,
@@ -42,6 +44,8 @@ const ProjectDrawer = () => {
   ) => {
     await fnCreateProject(formData);
     reset();
+    setOpen(false);
+    router.push("/projects");
   };
 
   useEffect(() => {
@@ -59,7 +63,7 @@ const ProjectDrawer = () => {
   const handleClose = () => {
     reset();
     setOpen(false);
-    router.push("/");
+    router.push(path);
   };
 
   return (

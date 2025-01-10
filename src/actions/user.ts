@@ -19,7 +19,6 @@ export async function checkUser() {
       data: {
         name: user.fullName || "",
         email: user.emailAddresses[0].emailAddress,
-        role: "USER",
         imageUrl: user.imageUrl,
         clerkUserId: user.id,
       },

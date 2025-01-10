@@ -8,18 +8,16 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(uuid())
-  clerkUserId String   @unique
+  id          String  @id @default(uuid())
+  clerkUserId String  @unique
   name        String
-  email       String   @unique
-  role        UserRole @default(USER)
+  email       String  @unique
   imageUrl    String?
 
-  projects Project[] @relation("ProjectMembers")
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Project   Project[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Project     Project[]
+  UserProject UserProject[]
 }
 
 model Project {
@@ -28,13 +26,24 @@ model Project {
   description String?
   ownerId     String
   owner       User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  members     User[]  @relation("ProjectMembers")
 
   sprints Sprint[]
   tickets Ticket[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status ProjectStatus @default(ACTIVE)
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  UserProject UserProject[]
+}
+
+model UserProject {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  role      UserRole
 }
 
 model Sprint {
@@ -70,6 +79,9 @@ model Ticket {
 
 enum UserRole {
   ADMIN
+  MANAGER
+  DEVELOPER
+  TESTER
   USER
 }
 
@@ -84,4 +96,10 @@ enum TicketPriority {
   MEDIUM
   HIGH
   URGENT
+}
+
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  HOLD
 }
