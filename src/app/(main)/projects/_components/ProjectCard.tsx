@@ -1,3 +1,5 @@
+"use client";
+
 import { ProjectStatusEnum, ProjectType, UserType } from "@/lib/types";
 import {
   Card,
@@ -9,20 +11,33 @@ import {
 } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Label } from "@/components/ui/label";
-
-import { CheckCircle2, ArrowUpIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { CheckCircle2, ArrowUpIcon, Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type ProjectCardProp = ProjectType & { owner: UserType } & {
   memberCount: number;
 };
 
 const ProjectCard = ({ project }: { project: ProjectCardProp }) => {
+  const router = useRouter();
+
+  const handleSettingsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push(`/projects/settings/${project.id}`);
+  };
   return (
-    <Card className="w-full">
+    <Card className="w-full relative">
       <CardHeader>
         <CardTitle className="text-xl font-semibold">{project.name}</CardTitle>
         <CardDescription>{project.description}</CardDescription>
       </CardHeader>
+      <div className="absolute right-5 top-5">
+        <span onClick={handleSettingsClick}>
+          <Settings size={16} className="hover:animate-spin duration-1000" />
+        </span>
+      </div>
       <CardContent>
         <div className="flex flex-col gap-3">
           <Label className="flex items-center">

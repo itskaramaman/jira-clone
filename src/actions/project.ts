@@ -74,8 +74,6 @@ export async function getAllProjects() {
       })
     );
 
-    console.log("projectMembersCount", projectsWithMembers);
-
     return projectsWithMembers;
   } catch (error) {
     if (error instanceof Error) {
@@ -83,5 +81,36 @@ export async function getAllProjects() {
     }
 
     throw new Error("Error while getting all projects");
+  }
+}
+
+export async function getProjectById(id: string) {
+  try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    const user = await db.user.findUnique({ where: { clerkUserId: userId } });
+    if (!user) throw new Error("User not found");
+
+    const project = await db.project.findUnique({
+      where: { id, ownerId: user.id },
+      include: {
+        owner: true,
+      },
+    });
+
+    const members = await db.userProject.findMany({
+      where: { projectId: id },
+      include: {
+        user: true,
+      },
+    });
+
+    return { project, members };
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("Error while getting project by Id");
   }
 }

@@ -18,6 +18,13 @@ export type UserType = {
   updatedAt: Date;
 };
 
+export type UserProjectType = {
+  id: string;
+  projectId: string;
+  role: UserRoleEnum;
+  userId: string;
+};
+
 export enum UserRoleEnum {
   ADMIN = "ADMIN",
   USER = "USER",
