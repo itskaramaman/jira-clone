@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Trash2 } from "lucide-react";
+import UserSearch from "./UserSearch";
 
 type Member = UserProjectType & { user: UserType };
 type ProjectFormType = {
@@ -159,6 +160,7 @@ const ProjectForm = ({ project, members }: ProjectFormType) => {
             </div>
           ) : null}
         </div>
+        <UserSearch />
         <div>
           <Label>Members</Label>
           <div>
